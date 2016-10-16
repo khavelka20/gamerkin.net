@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h3 class="modal-title pull-left">Gameplay Video For <%vm.gameData.name%></h3> <button class="btn btn-danger pull-right" type="button" ng-click="close()"><i class="fa fa-times"></i></button>
+</div>
+<div class="modal-body">
+    <youtube-embed code="vm.gameData.youtubeId"></youtube-embed>
+    <hr />
+    <h4>More Videos For <%vm.gameData.name%> </h4>
+    <div class="row">
+        <div ng-show="vm.loading" style="text-align: center;">
+            <img src="http://127.0.0.1/edsa-assets/img/378.gif" alt="loading"/>
+        </div>
+        <div class="col-md-4" ng-repeat="video in vm.videos">
+            <div class="more-youtube-videos">
+                <i class="fa fa-youtube-play play-button"
+                   ng-click="showVideo(video)"></i>
+                <img class="img-responsive game-header-img clickable" 
+                     ng-src="<%video.snippet.thumbnails.medium.url%>"
+                     ng-click="showVideo(video)"/>
+                <h5 class="green-text">
+                    <%video.snippet.title%>
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>

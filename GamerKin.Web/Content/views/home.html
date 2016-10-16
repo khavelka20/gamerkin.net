@@ -1,0 +1,71 @@
+<div id="page">
+    <div ng-include="'http://localhost:65506/content/views/common/loading.html'"></div>
+
+    <div id="fixed-message" ng-bind-html="vm.alertMessage" ng-show="vm.alertMessage"></div>
+
+    <h2>Owned Games for <% globalVm.gamer.name %></h2>
+    <hr/>
+    <div class="row">
+        <div ng-repeat="gamerGame in vm.object.homeVM.gamer_games.slice(((vm.state.currentPage - 1) * vm.settings.gamesPerPage), ((vm.state.currentPage) * vm.settings.gamesPerPage))" 
+             class="col-lg-3 col-md-4 col-xs-6">
+            <div class="game-box-small">
+                <img class="img-responsive game-header-img" ng-src="<% gamerGame.game.logo%>"/>
+                <h4><% gamerGame.game.name %></h4>
+                <div ng-show="gamerGame.time_played > 0">
+                    <i class="fa fa-clock-o"></i> <% gamerGame.time_played | readableTime:'mm' :'hhh mmm':false %> played
+                </div>
+                <div ng-show="gamerGame.time_played === 0">
+                    <span class="label label-danger"> 
+                        Rate This Game
+                    </span>
+                    <br/>
+                    <div class="btn-group" style="margin-top: 5px;">
+                        <label class="btn btn-default btn-sm rating-button" 
+                               ng-disabled="vm.ratingPending" 
+                               ng-click="rateGame(gamerGame)" 
+                               ng-model="gamerGame.rating" 
+                               uib-btn-radio="1">
+                            1
+                        </label>
+                        <label class="btn btn-default btn-sm rating-button" 
+                               ng-disabled="vm.ratingPending"
+                               ng-click="rateGame(gamerGame)" 
+                               ng-model="gamerGame.rating" 
+                               uib-btn-radio="2">
+                            2
+                        </label>
+                        <label class="btn btn-default btn-sm rating-button" 
+                               ng-disabled="vm.ratingPending"
+                               ng-click="rateGame(gamerGame)" 
+                               ng-model="gamerGame.rating" 
+                               uib-btn-radio="3">
+                            3
+                        </label>
+                        <label class="btn btn-default btn-sm rating-button" 
+                               ng-disabled="vm.ratingPending"
+                               ng-click="rateGame(gamerGame)" 
+                               ng-model="gamerGame.rating" 
+                               uib-btn-radio="4">
+                            4
+                        </label>
+                        <label class="btn btn-default btn-sm rating-button" 
+                               ng-disabled="vm.ratingPending"
+                               ng-click="rateGame(gamerGame)" 
+                               ng-model="gamerGame.rating" 
+                               uib-btn-radio="5">
+                            5
+                        </label>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <uib-pagination 
+        boundary-links="true"
+        total-items="vm.state.librarySize" 
+        ng-model="vm.state.currentPage" 
+        items-per-page="vm.settings.gamesPerPage"
+        ng-change="pageChanged()">
+    </uib-pagination>
+</div>

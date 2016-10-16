@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f4aa87b740e043448528509fc2f484fd" Name="Diagram1" ZoomLevel="101">
+        <EntityTypeShape EntityType="gamerkinModel.game_assets" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="gamerkinModel.game_genre" Width="1.5" PointX="6" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="gamerkinModel.game_platforms" Width="1.5" PointX="3" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="gamerkinModel.game_prices" Width="1.5" PointX="3" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="gamerkinModel.gamer_games" Width="1.5" PointX="6" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="gamerkinModel.gamer_genre_skew" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="gamerkinModel.gamer" Width="1.5" PointX="3.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="gamerkinModel.game" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="gamerkinModel.genre" Width="1.5" PointX="3.75" PointY="19.75" IsExpanded="true" />
+        <AssociationConnector Association="gamerkinModel.fk_game_assets_games" ManuallyRouted="false" />
+        <AssociationConnector Association="gamerkinModel.fk_game_genres_game" ManuallyRouted="false" />
+        <AssociationConnector Association="gamerkinModel.fk_game_genres_genre" ManuallyRouted="false" />
+        <AssociationConnector Association="gamerkinModel.fk_game_platforms_game" ManuallyRouted="false" />
+        <AssociationConnector Association="gamerkinModel.fk_game_prices_game" ManuallyRouted="false" />
+        <AssociationConnector Association="gamerkinModel.fk_gamer_games_game" ManuallyRouted="false" />
+        <AssociationConnector Association="gamerkinModel.fk_gamer_games_gamer" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

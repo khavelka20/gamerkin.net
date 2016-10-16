@@ -1,0 +1,79 @@
+<div ng-include="'http://localhost:65506/content/views/common/loading.html'"></div>
+<div id="details-page-img-bg" ng-style="{'background-image': 'url(' + vm.object.gameDetailsVM.Details.screen_shots[1].full_url + ')'}" style="background-repeat: no-repeat;background-size: cover;
+     width: 100%;
+     height: 700px;">
+</div>
+<div id='details-page-header'>
+    <div class="container-fluid">
+        <h1><% vm.object.gameDetailsVM.Details.name %></h1>
+        <span class="details-page-header-info">
+            <i class="fa fa-thumbs-up"></i>
+            <% vm.object.gameDetailsVM.Details.steam_user_rating %>
+        </span>
+        <span class="spacer"></span>
+        <span class="details-page-header-info" ng-repeat="genre in vm.object.gameDetailsVM.Details.genres | limitTo: 3">
+            <i class="fa fa-tag"></i> <% genre.name %>
+        </span>
+        <span class="spacer"></span>
+        <span class="details-page-header-info">
+            <i class="fa fa-laptop"></i> <% vm.object.gameDetailsVM.Details.developer %>
+        </span>
+        <span class="spacer"></span>
+        <display-platforms verbose="true" platforms="vm.object.gameDetailsVM.Details.platforms"></display-platforms>
+        <hr style="border-bottom: 1px solid rgba(255, 255, 255, 0.5);border-top: none;" />
+        <div class="row">
+            <div class="col-md-6 col-md-offset-1">
+                <div id="details-page-media-area" style="height: 400px;background: #000;">
+                    
+                    <gamer-kin-video ng-if="vm.state.mediaGallery.showGamePlayClip"
+                                     game-id="vm.object.gameDetailsVM.Details.id">
+                    </gamer-kin-video>
+
+                    <youtube-embed code="vm.object.gameDetailsVM.Details.videos[0].youtube_id" ng-if="vm.state.mediaGallery.showYoutubeVideo"></youtube-embed>
+
+                    <img style="height: 100%; width: 100%;"
+                         ng-src="<%vm.state.mediaGallery.screenShotUrl%>"
+                         ng-if="vm.state.mediaGallery.showScreenShot" />
+
+                </div>
+                <div id="thumb-scroller" style="width: 100%;overflow-x: scroll;overflow-y: hidden;margin-top: 10px;padding-bottom: 10px;">
+                    <div style="height:75px;text-align: left;" ng-style="{'width': ((vm.object.gameDetailsVM.Details.screen_shots.length * 135) + 270) + 'px'}">
+                        <div class="video"
+                             ng-style="{'background-image': 'url(' + vm.object.gameDetailsVM.Details.logo + ')'}" style="background-size: cover;"
+                             ng-class="{'active': vm.state.mediaGallery.showGamePlayClip}"
+                             ng-click="showGamePlayClip()">
+                            <i class="fa fa-play"></i>
+                        </div>
+                        <div class="video"
+                             ng-style="{'background-image': 'url(' + vm.object.gameDetailsVM.Details.logo + ')'}" style="background-size: cover;"
+                             ng-class="{'active': vm.state.mediaGallery.showYoutubeVideo}"
+                             ng-click="showYoutubeVideo()">
+                            <i class="fa fa-play"></i>
+                        </div>
+                        <img style="height:100%; width:125px;margin-right: 10px;cursor: pointer;"
+                             ng-repeat="screenShot in vm.object.gameDetailsVM.Details.screen_shots"
+                             ng-src="<%screenShot.thumb_url%>"
+                             ng-click="showScreenShot(screenShot)"
+                             ng-class="{'active': screenShot.active}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div ng-repeat="price in vm.object.gameDetailsVM.Details.prices">
+                    <button class="btn btn-success btn-block">
+                        <i class="fa fa-steam-square" aria-hidden="true"></i> Buy On <% price.source %> For <% (price.price / 100) | currency %>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid" id="page">
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Description</h4>
+            <hr />
+            <div style="color:#777;" ng-bind-html="vm.object.gameDetailsVM.Details.description | toTrusted"></div>
+        </div>
+    </div>
+</div>

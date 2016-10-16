@@ -1,0 +1,67 @@
+<div id="page">
+    <h2>Browsing For <% vm.input.filterText %> Games</h2>
+    <hr/>
+    <div ng-show="vm.state.loading" style="text-align: center;">
+        <img src="http://127.0.0.1/edsa-assets/img/378.gif" alt="loading"/>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-xs-12" 
+             ng-repeat="game in vm.object.browseVM.Games.slice(((vm.state.currentPage - 1) * vm.settings.gamesPerPage), ((vm.state.currentPage) * vm.settings.gamesPerPage))">
+            <div class="game-box">
+                <steam-rating rating ="game.steam_user_rating"></steam-rating>
+                <img class="img-responsive game-header-img" 
+                     ng-src="<%game.logo%>"
+                     ng-show="game.show_header"
+                     style="cursor: pointer;"
+                     ng-click="showPreview(game)">
+                <div class="game-preview-container"
+                     ng-if="game.show_preview">
+                    <button class="btn btn-default btn-sm close-preview"
+                            ng-click="hidePreview(game)">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <gamer-kin-video game-id='game.id'></gamer-kin-video>
+                    <button class="btn btn-default btn-sm watch-full-video"
+                            ng-click="showYoutube(game)">
+                        <i class="fa fa-youtube-play"></i> Watch Full Video
+                    </button>
+                    <a class="btn btn-default btn-sm view-game-details"
+                       ng-href="#/details/<%game.name | escape%>/<% game.id %>">
+                        View Game Details
+                    </a>
+                </div>
+                <div class="game-overview"
+                     ng-show="game.show_header">
+                    <h4>
+                        <a ng-href="#/details/<%game.name | escape%>/<% game.id %>">
+                            <% game.name %>
+                        </a>
+                    </h4>
+                    <span class="lighter" style="font-size: 12px;"><i class="fa fa-laptop"></i> <% game.developer %></span>
+                    <p style="margin-top: 10px;margin-bottom: 10px;">
+                        <%game.description | htmlToPlaintext | words:20%>
+                    </p>
+                    <div class="pull-left">
+                        <span class="lighter" style="margin-right: 5px;font-size: 12px;" ng-repeat="genre in game.top_genres">
+                            <% genre.name %>
+                        </span>
+                    </div>
+                    <a class="btn btn-default btn-sm pull-right"
+                       ng-href="#/details/<%game.name | escape%>/<% game.id %>">
+                        View Game Details
+                    </a>
+                    <div class="clearfix"></div>
+                    <div class="lighter">
+                        <display-platforms platforms="game.platforms"></display-platforms>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <uib-pagination 
+        total-items="vm.state.gamesToBrowse" 
+        ng-model="vm.state.currentPage" 
+        items-per-page="vm.settings.gamesPerPage"
+        ng-change="pageChanged()">
+    </uib-pagination>
+</div>

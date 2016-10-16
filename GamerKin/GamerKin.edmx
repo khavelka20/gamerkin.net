@@ -1,0 +1,656 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="gamerkinModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="game_assets">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="255" />
+          <Property Name="status" Type="varchar" MaxLength="255" />
+          <Property Name="game_id" Type="int" Nullable="false" />
+          <Property Name="created_at" Type="date" />
+          <Property Name="updated_at" Type="date" />
+          <Property Name="youtube_id" Type="varchar" MaxLength="45" />
+          <Property Name="clip_duration" Type="int" />
+          <Property Name="thumb_url" Type="varchar" MaxLength="255" />
+          <Property Name="full_url" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="game_genre">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="game_id" Type="int" Nullable="false" />
+          <Property Name="created_at" Type="date" Nullable="false" />
+          <Property Name="updated_at" Type="date" Nullable="false" />
+          <Property Name="rank" Type="int" Nullable="false" />
+          <Property Name="genre_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="game_platforms">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="game_id" Type="int" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="created_at" Type="date" />
+          <Property Name="updated_at" Type="date" />
+        </EntityType>
+        <EntityType Name="game_prices">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="game_id" Type="int" />
+          <Property Name="source" Type="varchar" MaxLength="255" />
+          <Property Name="created_at" Type="date" />
+          <Property Name="updated_at" Type="date" />
+          <Property Name="price" Type="int" />
+        </EntityType>
+        <EntityType Name="gamer_games">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="gamer_id" Type="int" Nullable="false" />
+          <Property Name="game_id" Type="int" Nullable="false" />
+          <Property Name="rating" Type="int" />
+          <Property Name="created_at" Type="date" Nullable="false" />
+          <Property Name="updated_at" Type="date" Nullable="false" />
+          <Property Name="time_played" Type="int" />
+          <Property Name="include" Type="int" />
+        </EntityType>
+        <EntityType Name="gamer_genre_skew">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="gamer_id" Type="int" />
+          <Property Name="genre_id" Type="int" />
+          <Property Name="skew" Type="int" />
+          <Property Name="created_at" Type="date" />
+          <Property Name="updated_at" Type="date" />
+        </EntityType>
+        <EntityType Name="gamers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="steam_id" Type="bigint" Nullable="false" />
+          <Property Name="avatar" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="avatar_medium" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_at" Type="date" Nullable="false" />
+          <Property Name="updated_at" Type="date" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="games">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="steam_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="logo" Type="varchar" MaxLength="255" />
+          <Property Name="steam_user_rating" Type="varchar" MaxLength="255" />
+          <Property Name="metacritic_rating" Type="int" />
+          <Property Name="description" Type="text" />
+          <Property Name="type" Type="varchar" MaxLength="11" />
+          <Property Name="created_at" Type="date" Nullable="false" />
+          <Property Name="updated_at" Type="date" Nullable="false" />
+          <Property Name="steam_user_rating_value" Type="int" />
+          <Property Name="developer" Type="varchar" MaxLength="255" />
+          <Property Name="predicted_score" Type="decimal" Precision="10" Scale="10" />
+        </EntityType>
+        <EntityType Name="genres">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="created_at" Type="date" Nullable="false" />
+          <Property Name="updated_at" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_game_assets_games">
+          <End Role="games" Type="Self.games" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="game_assets" Type="Self.game_assets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_assets">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_game_genres_game">
+          <End Role="games" Type="Self.games" Multiplicity="1" />
+          <End Role="game_genre" Type="Self.game_genre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_genre">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_game_genres_genre">
+          <End Role="genres" Type="Self.genres" Multiplicity="1" />
+          <End Role="game_genre" Type="Self.game_genre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="genres">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_genre">
+              <PropertyRef Name="genre_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_game_platforms_game">
+          <End Role="games" Type="Self.games" Multiplicity="0..1" />
+          <End Role="game_platforms" Type="Self.game_platforms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_platforms">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_game_prices_game">
+          <End Role="games" Type="Self.games" Multiplicity="0..1" />
+          <End Role="game_prices" Type="Self.game_prices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_prices">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_gamer_games_game">
+          <End Role="games" Type="Self.games" Multiplicity="1" />
+          <End Role="gamer_games" Type="Self.gamer_games" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="gamer_games">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_gamer_games_gamer">
+          <End Role="gamers" Type="Self.gamers" Multiplicity="1" />
+          <End Role="gamer_games" Type="Self.gamer_games" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="gamers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="gamer_games">
+              <PropertyRef Name="gamer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_get_recommended_games" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="gamerkin">
+          <Parameter Name="gamerId" Type="int" Mode="In" />
+          <Parameter Name="minRating" Type="int" Mode="In" />
+          <Parameter Name="limitTo" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="gamerkinModelStoreContainer">
+          <EntitySet Name="game_assets" EntityType="Self.game_assets" Schema="gamerkin" store:Type="Tables" />
+          <EntitySet Name="game_genre" EntityType="Self.game_genre" Schema="gamerkin" store:Type="Tables" />
+          <EntitySet Name="game_platforms" EntityType="Self.game_platforms" Schema="gamerkin" store:Type="Tables" />
+          <EntitySet Name="game_prices" EntityType="Self.game_prices" Schema="gamerkin" store:Type="Tables" />
+          <EntitySet Name="gamer_games" EntityType="Self.gamer_games" Schema="gamerkin" store:Type="Tables" />
+          <EntitySet Name="gamer_genre_skew" EntityType="Self.gamer_genre_skew" Schema="gamerkin" store:Type="Tables" />
+          <EntitySet Name="gamers" EntityType="Self.gamers" Schema="gamerkin" store:Type="Tables" />
+          <EntitySet Name="games" EntityType="Self.games" Schema="gamerkin" store:Type="Tables" />
+          <EntitySet Name="genres" EntityType="Self.genres" Schema="gamerkin" store:Type="Tables" />
+          <AssociationSet Name="fk_game_assets_games" Association="Self.fk_game_assets_games">
+            <End Role="games" EntitySet="games" />
+            <End Role="game_assets" EntitySet="game_assets" />
+          </AssociationSet>
+          <AssociationSet Name="fk_game_genres_game" Association="Self.fk_game_genres_game">
+            <End Role="games" EntitySet="games" />
+            <End Role="game_genre" EntitySet="game_genre" />
+          </AssociationSet>
+          <AssociationSet Name="fk_game_genres_genre" Association="Self.fk_game_genres_genre">
+            <End Role="genres" EntitySet="genres" />
+            <End Role="game_genre" EntitySet="game_genre" />
+          </AssociationSet>
+          <AssociationSet Name="fk_game_platforms_game" Association="Self.fk_game_platforms_game">
+            <End Role="games" EntitySet="games" />
+            <End Role="game_platforms" EntitySet="game_platforms" />
+          </AssociationSet>
+          <AssociationSet Name="fk_game_prices_game" Association="Self.fk_game_prices_game">
+            <End Role="games" EntitySet="games" />
+            <End Role="game_prices" EntitySet="game_prices" />
+          </AssociationSet>
+          <AssociationSet Name="fk_gamer_games_game" Association="Self.fk_gamer_games_game">
+            <End Role="games" EntitySet="games" />
+            <End Role="gamer_games" EntitySet="gamer_games" />
+          </AssociationSet>
+          <AssociationSet Name="fk_gamer_games_gamer" Association="Self.fk_gamer_games_gamer">
+            <End Role="gamers" EntitySet="gamers" />
+            <End Role="gamer_games" EntitySet="gamer_games" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="gamerkinModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="game_assets">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="game_id" Type="Int32" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" />
+          <Property Name="updated_at" Type="DateTime" />
+          <Property Name="youtube_id" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="clip_duration" Type="Int32" />
+          <Property Name="thumb_url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="full_url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="game" Relationship="Self.fk_game_assets_games" FromRole="game_assets" ToRole="games" />
+        </EntityType>
+        <EntityType Name="game_genre">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="game_id" Type="Int32" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" />
+          <Property Name="rank" Type="Int32" Nullable="false" />
+          <Property Name="genre_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="game" Relationship="Self.fk_game_genres_game" FromRole="game_genre" ToRole="games" />
+          <NavigationProperty Name="genre" Relationship="Self.fk_game_genres_genre" FromRole="game_genre" ToRole="genres" />
+        </EntityType>
+        <EntityType Name="game_platforms">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="game_id" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" />
+          <Property Name="updated_at" Type="DateTime" />
+          <NavigationProperty Name="game" Relationship="Self.fk_game_platforms_game" FromRole="game_platforms" ToRole="games" />
+        </EntityType>
+        <EntityType Name="game_prices">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="game_id" Type="Int32" />
+          <Property Name="source" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" />
+          <Property Name="updated_at" Type="DateTime" />
+          <Property Name="price" Type="Int32" />
+          <NavigationProperty Name="game" Relationship="Self.fk_game_prices_game" FromRole="game_prices" ToRole="games" />
+        </EntityType>
+        <EntityType Name="gamer_games">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="gamer_id" Type="Int32" Nullable="false" />
+          <Property Name="game_id" Type="Int32" Nullable="false" />
+          <Property Name="rating" Type="Int32" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" />
+          <Property Name="time_played" Type="Int32" />
+          <Property Name="include" Type="Int32" />
+          <NavigationProperty Name="game" Relationship="Self.fk_gamer_games_game" FromRole="gamer_games" ToRole="games" />
+        </EntityType>
+        <EntityType Name="gamer_genre_skew">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="gamer_id" Type="Int32" />
+          <Property Name="genre_id" Type="Int32" />
+          <Property Name="skew" Type="Int32" />
+          <Property Name="created_at" Type="DateTime" />
+          <Property Name="updated_at" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="gamer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="steam_id" Type="Int64" Nullable="false" />
+          <Property Name="avatar" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="avatar_medium" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="gamer_games" Relationship="Self.fk_gamer_games_gamer" FromRole="gamers" ToRole="gamer_games" />
+        </EntityType>
+        <EntityType Name="game">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="steam_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="logo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="steam_user_rating" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="metacritic_rating" Type="Int32" />
+          <Property Name="description" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="type" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" />
+          <Property Name="steam_user_rating_value" Type="Int32" />
+          <Property Name="developer" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="predicted_score" Type="Decimal" />
+          <NavigationProperty Name="game_assets" Relationship="Self.fk_game_assets_games" FromRole="games" ToRole="game_assets" />
+          <NavigationProperty Name="game_genre" Relationship="Self.fk_game_genres_game" FromRole="games" ToRole="game_genre" />
+          <NavigationProperty Name="game_platforms" Relationship="Self.fk_game_platforms_game" FromRole="games" ToRole="game_platforms" />
+          <NavigationProperty Name="game_prices" Relationship="Self.fk_game_prices_game" FromRole="games" ToRole="game_prices" />
+        </EntityType>
+        <EntityType Name="genre">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="game_genre" Relationship="Self.fk_game_genres_genre" FromRole="genres" ToRole="game_genre" />
+        </EntityType>
+        <Association Name="fk_game_assets_games">
+          <End Role="games" Type="Self.game" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="game_assets" Type="Self.game_assets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_assets">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_game_genres_game">
+          <End Role="games" Type="Self.game" Multiplicity="1" />
+          <End Role="game_genre" Type="Self.game_genre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_genre">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_game_genres_genre">
+          <End Role="genres" Type="Self.genre" Multiplicity="1" />
+          <End Role="game_genre" Type="Self.game_genre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="genres">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_genre">
+              <PropertyRef Name="genre_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_game_platforms_game">
+          <End Role="games" Type="Self.game" Multiplicity="0..1" />
+          <End Role="game_platforms" Type="Self.game_platforms" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_platforms">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_game_prices_game">
+          <End Role="games" Type="Self.game" Multiplicity="0..1" />
+          <End Role="game_prices" Type="Self.game_prices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="game_prices">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_gamer_games_game">
+          <End Role="games" Type="Self.game" Multiplicity="1" />
+          <End Role="gamer_games" Type="Self.gamer_games" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="games">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="gamer_games">
+              <PropertyRef Name="game_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_gamer_games_gamer">
+          <End Role="gamers" Type="Self.gamer" Multiplicity="1" />
+          <End Role="gamer_games" Type="Self.gamer_games" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="gamers">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="gamer_games">
+              <PropertyRef Name="gamer_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="gamerkinEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="game_assets" EntityType="Self.game_assets" />
+          <EntitySet Name="game_genre" EntityType="Self.game_genre" />
+          <EntitySet Name="game_platforms" EntityType="Self.game_platforms" />
+          <EntitySet Name="game_prices" EntityType="Self.game_prices" />
+          <EntitySet Name="gamer_games" EntityType="Self.gamer_games" />
+          <EntitySet Name="gamer_genre_skew" EntityType="Self.gamer_genre_skew" />
+          <EntitySet Name="gamers" EntityType="Self.gamer" />
+          <EntitySet Name="games" EntityType="Self.game" />
+          <EntitySet Name="genres" EntityType="Self.genre" />
+          <AssociationSet Name="fk_game_assets_games" Association="Self.fk_game_assets_games">
+            <End Role="games" EntitySet="games" />
+            <End Role="game_assets" EntitySet="game_assets" />
+          </AssociationSet>
+          <AssociationSet Name="fk_game_genres_game" Association="Self.fk_game_genres_game">
+            <End Role="games" EntitySet="games" />
+            <End Role="game_genre" EntitySet="game_genre" />
+          </AssociationSet>
+          <AssociationSet Name="fk_game_genres_genre" Association="Self.fk_game_genres_genre">
+            <End Role="genres" EntitySet="genres" />
+            <End Role="game_genre" EntitySet="game_genre" />
+          </AssociationSet>
+          <AssociationSet Name="fk_game_platforms_game" Association="Self.fk_game_platforms_game">
+            <End Role="games" EntitySet="games" />
+            <End Role="game_platforms" EntitySet="game_platforms" />
+          </AssociationSet>
+          <AssociationSet Name="fk_game_prices_game" Association="Self.fk_game_prices_game">
+            <End Role="games" EntitySet="games" />
+            <End Role="game_prices" EntitySet="game_prices" />
+          </AssociationSet>
+          <AssociationSet Name="fk_gamer_games_game" Association="Self.fk_gamer_games_game">
+            <End Role="games" EntitySet="games" />
+            <End Role="gamer_games" EntitySet="gamer_games" />
+          </AssociationSet>
+          <AssociationSet Name="fk_gamer_games_gamer" Association="Self.fk_gamer_games_gamer">
+            <End Role="gamers" EntitySet="gamers" />
+            <End Role="gamer_games" EntitySet="gamer_games" />
+          </AssociationSet>
+          <FunctionImport Name="sp_get_recommended_games" EntitySet="games" ReturnType="Collection(gamerkinModel.game)">
+            <Parameter Name="gamerId" Mode="In" Type="Int32" />
+            <Parameter Name="minRating" Mode="In" Type="Int32" />
+            <Parameter Name="limitTo" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="sp_get_recommended_games_Result" />
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="gamerkinModelStoreContainer" CdmEntityContainer="gamerkinEntities">
+          <EntitySetMapping Name="game_assets">
+            <EntityTypeMapping TypeName="gamerkinModel.game_assets">
+              <MappingFragment StoreEntitySet="game_assets">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="game_id" ColumnName="game_id" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="youtube_id" ColumnName="youtube_id" />
+                <ScalarProperty Name="clip_duration" ColumnName="clip_duration" />
+                <ScalarProperty Name="thumb_url" ColumnName="thumb_url" />
+                <ScalarProperty Name="full_url" ColumnName="full_url" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="game_genre">
+            <EntityTypeMapping TypeName="gamerkinModel.game_genre">
+              <MappingFragment StoreEntitySet="game_genre">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="game_id" ColumnName="game_id" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="rank" ColumnName="rank" />
+                <ScalarProperty Name="genre_id" ColumnName="genre_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="game_platforms">
+            <EntityTypeMapping TypeName="gamerkinModel.game_platforms">
+              <MappingFragment StoreEntitySet="game_platforms">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="game_id" ColumnName="game_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="game_prices">
+            <EntityTypeMapping TypeName="gamerkinModel.game_prices">
+              <MappingFragment StoreEntitySet="game_prices">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="game_id" ColumnName="game_id" />
+                <ScalarProperty Name="source" ColumnName="source" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="price" ColumnName="price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="gamer_games">
+            <EntityTypeMapping TypeName="gamerkinModel.gamer_games">
+              <MappingFragment StoreEntitySet="gamer_games">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="gamer_id" ColumnName="gamer_id" />
+                <ScalarProperty Name="game_id" ColumnName="game_id" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="time_played" ColumnName="time_played" />
+                <ScalarProperty Name="include" ColumnName="include" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="gamer_genre_skew">
+            <EntityTypeMapping TypeName="gamerkinModel.gamer_genre_skew">
+              <MappingFragment StoreEntitySet="gamer_genre_skew">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="gamer_id" ColumnName="gamer_id" />
+                <ScalarProperty Name="genre_id" ColumnName="genre_id" />
+                <ScalarProperty Name="skew" ColumnName="skew" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="gamers">
+            <EntityTypeMapping TypeName="gamerkinModel.gamer">
+              <MappingFragment StoreEntitySet="gamers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="steam_id" ColumnName="steam_id" />
+                <ScalarProperty Name="avatar" ColumnName="avatar" />
+                <ScalarProperty Name="avatar_medium" ColumnName="avatar_medium" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="games">
+            <EntityTypeMapping TypeName="gamerkinModel.game">
+              <MappingFragment StoreEntitySet="games">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="steam_id" ColumnName="steam_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="logo" ColumnName="logo" />
+                <ScalarProperty Name="steam_user_rating" ColumnName="steam_user_rating" />
+                <ScalarProperty Name="metacritic_rating" ColumnName="metacritic_rating" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="steam_user_rating_value" ColumnName="steam_user_rating_value" />
+                <ScalarProperty Name="developer" ColumnName="developer" />
+                <ScalarProperty Name="predicted_score" ColumnName="predicted_score" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="genres">
+            <EntityTypeMapping TypeName="gamerkinModel.genre">
+              <MappingFragment StoreEntitySet="genres">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_get_recommended_games" FunctionName="gamerkinModel.Store.sp_get_recommended_games">
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
